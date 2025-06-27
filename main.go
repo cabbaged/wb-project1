@@ -43,9 +43,7 @@ func main() {
 			return
 		}
 
-		row := db.QueryRow("SELECT data FROM orders WHERE order_uid = $1", id)
-		var jsonData string
-		err := row.Scan(&jsonData)
+		jsonData, err := database.GetOrderByID(db, id)
 		if err != nil {
 			http.Error(w, "order not found", http.StatusNotFound)
 			return
