@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск заказа</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        input { width: 300px; padding: 8px; margin-right: 10px; }
+        button { padding: 8px 12px; }
+        pre { background: #f3f3f3; padding: 10px; white-space: pre-wrap; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Поиск заказа по ID</h1>
+
+<input type="text" id="orderIdInput" placeholder="Введите order_uid">
+<button onclick="fetchOrder()">Найти</button>
+
+<pre id="result">Здесь появится результат</pre>
+
+<script>
+    function fetchOrder() {
+        const id = document.getElementById("orderIdInput").value.trim();
+        const resultBox = document.getElementById("result");
+
+        if (!id) {
+            resultBox.textContent = "Пожалуйста, введите order_uid";
+            return;
+        }
+
+        fetch(`/order/${id}`)
+            .then(response => {
+                if (!response.ok) throw new Error("Заказ не найден");
+                return response.json();
+            })
+            .then(data => {
+                resultBox.textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                resultBox.textContent = "Ошибка: " + error.message;
+            });
+    }
+</script>
+
+</body>
+</html>
